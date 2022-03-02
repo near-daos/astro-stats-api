@@ -1,0 +1,19 @@
+indexer:
+  db:
+    host: '104.199.89.51'
+    port: '5432'
+    database: 'mainnet_explorer'
+    username: 'public_readonly'
+    password: 'nearprotocol'
+
+near:
+  env: mainnet
+  credentials: '.near-credentials'
+
+dao:
+  contractName: 'sputnik-dao.near'
+  tokenFactoryContractName: 'tkn.near'
+  bridgeTokenFactoryContractName: 'factory.bridge.near'
+
+sodaki:
+  baseUri: 'https://www.sodaki.com/api'

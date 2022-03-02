@@ -1,0 +1,99 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es2019"
+    ],
+    "paths": {
+      "@dao-stats/config": [
+        "libs/config/src"
+      ],
+      "@dao-stats/config/*": [
+        "libs/config/src/*"
+      ],
+      "@dao-stats/common": [
+        "libs/common/src"
+      ],
+      "@dao-stats/common/*": [
+        "libs/common/src/*"
+      ],
+      "@dao-stats/cache": [
+        "libs/cache/src"
+      ],
+      "@dao-stats/cache/*": [
+        "libs/cache/src/*"
+      ],
+      "@dao-stats/migrations": [
+        "libs/migrations/src"
+      ],
+      "@dao-stats/migrations/*": [
+        "libs/migrations/src/*"
+      ],
+      "@dao-stats/near": [
+        "libs/near/src"
+      ],
+      "@dao-stats/near/*": [
+        "libs/near/src/*"
+      ],
+      "@dao-stats/near-helper": [
+        "libs/near-helper/src"
+      ],
+      "@dao-stats/near-helper/*": [
+        "libs/near-helper/src/*"
+      ],
+      "@dao-stats/near-indexer": [
+        "libs/near-indexer/src"
+      ],
+      "@dao-stats/near-indexer/*": [
+        "libs/near-indexer/src/*"
+      ],
+      "@dao-stats/receipt": [
+        "libs/receipt/src"
+      ],
+      "@dao-stats/receipt/*": [
+        "libs/receipt/src/*"
+      ],
+      "@dao-stats/astro": [
+        "libs/astro/src"
+      ],
+      "@dao-stats/astro/*": [
+        "libs/astro/src/*"
+      ],
+      "@dao-stats/sodaki": [
+        "libs/sodaki/src"
+      ],
+      "@dao-stats/sodaki/*": [
+        "libs/sodaki/src/*"
+      ],
+      "@dao-stats/sputnik-dao": [
+        "libs/sputnik-dao/src"
+      ],
+      "@dao-stats/sputnik-dao/*": [
+        "libs/sputnik-dao/src/*"
+      ],
+      "@dao-stats/redis": [
+        "libs/redis/src"
+      ],
+      "@dao-stats/redis/*": [
+        "libs/redis/src/*"
+      ],
+      "@dao-stats/transaction": [
+        "libs/transaction/src"
+      ],
+      "@dao-stats/transaction/*": [
+        "libs/transaction/src/*"
+      ]
+    }
+  }
+}
