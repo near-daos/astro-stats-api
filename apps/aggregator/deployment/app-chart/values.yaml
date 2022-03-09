@@ -16,7 +16,13 @@ fullnameOverride: ""
 
 aggregatorNameOverride: "dao-stats-aggregator"
 aggregatorFullnameOverride: "dao-stats-aggregator"
-aggregatorConfig: ""
+aggregatorConfig: |
+  AGGREGATOR_POLLING_SCHEDULE: 0 * * * *
+  COINGECKO_API_BASE_URL: https://api.coingecko.com/api/v3
+  LOG_LEVELS: log,warn,error
+  NEST_APP_TYPE: aggregator
+  PORT: "3000"
+  SODAKI_API_BASE_URL: https://sodaki.com/api
 
 container:
   # Specifies the internal container port
@@ -87,3 +93,5 @@ version:
 
 environment:
   aggregator_polling_schedule: "0 * * * *"
+  sodaki_api_base_url: "https://sodaki.com/api"
+  coingecko_api_base_url: "https://api.coingecko.com/api/v3"
