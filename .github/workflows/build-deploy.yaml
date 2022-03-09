@@ -46,8 +46,8 @@ jobs:
           then
             echo "input was provided: ${{ github.event.inputs.environment }}"
             echo "::set-output name=environment::${{ github.event.inputs.environment }}"
-            echo "::set-output name=namespace::astro-stats-${github.event.inputs.environment}"
-            case "${github.event.inputs.environment}" in
+            echo "::set-output name=namespace::astro-stats-${{ github.event.inputs.environment }}"
+            case "${{ github.event.inputs.environment }}" in
               development)
                 echo "::set-output name=k8s_ingress_host::dev.api.astrostats.magicpowered.io"
                 echo "::set-output name=docker_env_tag::develop-$GITHUB_SHA"
@@ -57,7 +57,7 @@ jobs:
                 echo "::set-output name=docker_env_tag::$GITHUB_SHA"
               ;;
               *)
-                echo "Provided environment '${github.event.inputs.environment}' is incorrect"
+                echo "Provided environment '${{ github.event.inputs.environment }}' is incorrect"
                 exit 1
               ;;
             esac
