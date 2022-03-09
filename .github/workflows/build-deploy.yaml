@@ -116,4 +116,5 @@ jobs:
             helm -n ${{ needs.get-environment.outputs.namespace }} \
               upgrade --install --create-namespace --atomic astro-stats-${{ matrix.application.name }} $CHART_FOLDER \
               --set image.tag=$DOCKER_ENV_TAG \
+              --set aggregatorConfig=${{ secrets.aggregatorConfig }} \
               --set ingress.host=${{ needs.get-environment.outputs.k8s_ingress_host }}
