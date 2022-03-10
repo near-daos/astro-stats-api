@@ -53,7 +53,7 @@ spec:
             failureThreshold: {{ .Values.container.readinessProbe.failureThreshold }}
           envFrom:
           - configMapRef:
-              name: astro-stats-configmap
+              name: astro-stats-api-configmap
           - configMapRef:
               name: astro-stats-configmap
           - configMapRef:
