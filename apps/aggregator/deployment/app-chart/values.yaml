@@ -1,4 +1,4 @@
-# Default values for dao-stats-aggregator.
+# Default values for astro-stats-aggregator.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -7,15 +7,15 @@ replicaCount: 1
 image:
   repository: 398077236708.dkr.ecr.eu-central-1.amazonaws.com
   tag: latest
-  name: dao-stats-aggregator
+  name: astro-stats-aggregator
   pullPolicy: Always
 
 imagePullSecrets: [ ]
 nameOverride: ""
 fullnameOverride: ""
 
-aggregatorNameOverride: "dao-stats-aggregator"
-aggregatorFullnameOverride: "dao-stats-aggregator"
+aggregatorNameOverride: "astro-stats-aggregator"
+aggregatorFullnameOverride: "astro-stats-aggregator"
 aggregatorConfig: ""
 
 container:
@@ -65,7 +65,7 @@ service:
   targetPort: 3000
 
 ingress:
-  host: "dao-stats-api-host"
+  host: "astro-stats-api-host"
 
 # resources:
 #   limits:

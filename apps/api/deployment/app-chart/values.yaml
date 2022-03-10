@@ -1,4 +1,4 @@
-# Default values for dao-stats-api.
+# Default values for astro-stats-api.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: 398077236708.dkr.ecr.eu-central-1.amazonaws.com
   tag: latest
-  name: dao-stats-api
+  name: astro-stats-api
   pullPolicy: Always
 
 imagePullSecrets: [ ]
@@ -61,7 +61,7 @@ service:
   targetPort: 3000
 
 ingress:
-  host: "dao-stats-api-host"
+  host: "astro-stats-api-host"
 
 # resources:
 #   limits:
