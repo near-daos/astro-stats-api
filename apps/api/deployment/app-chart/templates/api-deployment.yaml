@@ -55,8 +55,6 @@ spec:
           - configMapRef:
               name: astro-stats-api-configmap
           - configMapRef:
-              name: astro-stats-configmap
-          - configMapRef:
               name: {{ .Release.Name }}-version
           - secretRef:
               name: db-secret
