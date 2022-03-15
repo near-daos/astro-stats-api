@@ -53,6 +53,12 @@ COPY --from=development /usr/src/app/dist ./dist
 COPY --from=development /usr/src/app/node_modules ./node_modules
 COPY --from=development /usr/src/app/entrypoints ./
 
+# following files are required to run migrations
+COPY --from=development /usr/src/app/libs ./
+COPY --from=development /usr/src/app/ormconfig.js ./
+COPY --from=development /usr/src/app/tsconfig.json ./
+COPY --from=development /usr/src/app/package.json ./
+
 EXPOSE 3000
 
 CMD [ "/bin/sh", "run.sh" ]

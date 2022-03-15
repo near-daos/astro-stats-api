@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: dao-stats-api-ingress
+  name: api
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     cert-manager.io/cluster-issuer: "letsencrypt-development"
@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts:
     - {{ .Values.ingress.host }}
-    secretName: {{ include "dao-stats-api.fullname" . }}-tls-secret
+    secretName: {{ include "astro-stats-api.fullname" . }}-tls-secret
   rules:
   - host: {{ .Values.ingress.host }}
     http:
@@ -18,7 +18,7 @@ spec:
         - path: /
           backend:
             service:
-              name: {{ include "dao-stats-api.fullname" . }}
+              name: {{ include "astro-stats-api.fullname" . }}
               port:
                 number: 80
           pathType: ImplementationSpecific

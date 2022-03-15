@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dao-stats-aggregator.fullname" . }}
+  name: {{ include "astro-stats-aggregator.fullname" . }}
   labels:
-    {{- include "dao-stats-aggregator.labels" . | nindent 4 }}
+    {{- include "astro-stats-aggregator.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "dao-stats-aggregator.selectorLabels" . | nindent 6 }}
+      {{- include "astro-stats-aggregator.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "dao-stats-aggregator.selectorLabels" . | nindent 8 }}
+        {{- include "astro-stats-aggregator.selectorLabels" . | nindent 8 }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "dao-stats-aggregator.serviceAccountName" . }}
+      serviceAccountName: {{ include "astro-stats-aggregator.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -54,7 +54,7 @@ spec:
           #   failureThreshold: {{ .Values.container.readinessProbe.failureThreshold }}
           envFrom:
           - configMapRef:
-              name: dao-stats-aggregator-configmap
+              name: astro-stats-aggregator-configmap
           - configMapRef:
               name: {{ .Release.Name }}-version
           - secretRef:

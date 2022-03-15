@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dao-stats-api.fullname" . }}
+  name: {{ include "astro-stats-api.fullname" . }}
   labels:
-    {{- include "dao-stats-api.labels" . | nindent 4 }}
+    {{- include "astro-stats-api.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "dao-stats-api.selectorLabels" . | nindent 6 }}
+      {{- include "astro-stats-api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "dao-stats-api.selectorLabels" . | nindent 8 }}
+        {{- include "astro-stats-api.selectorLabels" . | nindent 8 }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "dao-stats-api.serviceAccountName" . }}
+      serviceAccountName: {{ include "astro-stats-api.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -53,7 +53,7 @@ spec:
             failureThreshold: {{ .Values.container.readinessProbe.failureThreshold }}
           envFrom:
           - configMapRef:
-              name: dao-stats-api-configmap
+              name: astro-stats-api-configmap
           - configMapRef:
               name: {{ .Release.Name }}-version
           - secretRef:

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: dao-stats-aggregator-configmap
+  name: astro-stats-aggregator-configmap
 data:
   PORT: "3000"
   NEST_APP_TYPE: aggregator
@@ -9,3 +9,4 @@ data:
   LOG_LEVELS: "log,warn,error"
   SODAKI_API_BASE_URL: "{{ .Values.environment.sodaki_api_base_url }}"
   COINGECKO_API_BASE_URL: "{{ .Values.environment.coingecko_api_base_url }}"
+  SMART_CONTRACTS: astro
