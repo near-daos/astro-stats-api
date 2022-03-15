@@ -16,10 +16,12 @@ import {
   TransactionType,
 } from '@dao-stats/common';
 import { TransactionService } from '@dao-stats/transaction';
-import { GovernanceTotalResponse } from './dto/governance-total.dto';
-import { ProposalsTypesLeaderboardResponse } from './dto/proposals-types-leaderboard-response.dto';
-import { ProposalsTypesHistoryResponse } from './dto/proposals-types-history-response.dto';
-import { VoteRateLeaderboardResponse } from './dto/vote-rate-leaderboard-response.dto';
+import {
+  GovernanceTotalResponse,
+  ProposalsTypesHistoryResponse,
+  ProposalsTypesLeaderboardResponse,
+  VoteRateLeaderboardResponse,
+} from './dto';
 import { MetricService } from '../common/metric.service';
 import { getGrowth, getRate, patchMetricDays } from '../utils';
 
@@ -88,6 +90,8 @@ export class GovernanceService {
       }),
     ]);
 
+    const voteRate = getRate(proposalsApprovedCount, proposalsCount);
+
     return {
       proposals: {
         count: proposalsCount,
@@ -104,10 +108,10 @@ export class GovernanceService {
         members: proposalsMemberCount,
       },
       voteRate: {
-        count: getRate(proposalsApprovedCount, proposalsCount),
+        count: voteRate,
         growth: getGrowth(
-          proposalsApprovedCount / proposalsCount,
-          dayAgoProposalsApprovedCount / dayAgoProposalsCount,
+          voteRate,
+          getRate(dayAgoProposalsApprovedCount, dayAgoProposalsCount),
         ),
       },
     };
@@ -324,7 +328,7 @@ export class GovernanceService {
     const { contractId, dao } = context as DaoContractContext;
 
     const dayAgo = moment().subtract(1, 'days');
-    const weekAgo = moment().subtract(7, 'days');
+    const monthAgo = moment().subtract(30, 'month');
 
     const [totalLeaderboard, approvedLeaderboard] = await Promise.all([
       this.daoStatsService.getLeaderboard({
@@ -374,13 +378,13 @@ export class GovernanceService {
               contractId,
               dao,
               metric: DaoStatsMetric.ProposalsCount,
-              from: weekAgo.valueOf(),
+              from: monthAgo.valueOf(),
             }),
             this.daoStatsHistoryService.getHistory({
               contractId,
               dao,
               metric: DaoStatsMetric.ProposalsApprovedCount,
-              from: weekAgo.valueOf(),
+              from: monthAgo.valueOf(),
             }),
           ]);
 

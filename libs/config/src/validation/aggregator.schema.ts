@@ -12,5 +12,9 @@ export class AggregatorValidationSchema extends DatabaseValidationSchema {
 
   @IsString()
   @IsNotEmpty()
-  SMART_CONTRACTS: string;
+  SODAKI_API_BASE_URL: string;
+
+  @IsString()
+  @IsNotEmpty()
+  COINGECKO_API_BASE_URL: string;
 }

@@ -7,7 +7,7 @@ import {
 
 export declare class Aggregator {
   /**
-   * TODO remove transaction collection logic when all transaction queries are converted to dao stats.
+   * TODO remove transaction collection logic when all transaction queries are converted to astro stats.
    * @deprecated
    */
   aggregateReceiptActions(

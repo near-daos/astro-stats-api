@@ -1,3 +1,5 @@
+export * from './coin-price-query.dto';
+export * from './contract.dto';
 export * from './contract-context.dto';
 export * from './daily-count.dto';
 export * from './daily-metric.dto';
@@ -14,3 +16,4 @@ export * from './receipt.dto';
 export * from './receipt-action.dto';
 export * from './total.dto';
 export * from './transaction.dto';
+export * from './interval-metric-query.dto';

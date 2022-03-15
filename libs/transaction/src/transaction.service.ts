@@ -11,7 +11,10 @@ import {
   millisToNanos,
   Transaction,
   TransactionType,
+  ActivityInterval,
+  IntervalMetricQuery,
 } from '@dao-stats/common';
+
 import { TransactionLeaderboardDto } from './dto/transaction-leaderboard.dto';
 
 @Injectable()
@@ -57,7 +60,7 @@ export class TransactionService {
     const query = `
         with data as (
           select
-            date_trunc('day', to_timestamp(block_timestamp / 1000 / 1000 / 1000)) as day,
+            date_trunc('day', to_timestamp(block_timestamp / 1e9)) as day,
             count(1)
           from transactions
           where contract_id = '${contractId}' and type = '${txType}'
@@ -83,12 +86,13 @@ export class TransactionService {
     return this.getContractActivityCountQuery(context, metricQuery).getRawOne();
   }
 
-  async getContractActivityCountDaily(
+  async getContractActivityCountHistory(
     context: DaoContractContext | ContractContext,
     metricQuery?: MetricQuery,
+    interval?: ActivityInterval,
   ): Promise<DailyCountDto[]> {
     let queryBuilder = this.getContractActivityCountQuery(context, metricQuery);
-    queryBuilder = this.addDailySelection(queryBuilder);
+    queryBuilder = this.addIntervalSelection(queryBuilder, interval);
 
     return queryBuilder.execute();
   }
@@ -98,6 +102,18 @@ export class TransactionService {
     metricQuery?: MetricQuery,
   ): Promise<Metric> {
     return this.getUsersTotalQueryBuilder(context, metricQuery).getRawOne();
+  }
+
+  async getUsersTotalCountHistory(
+    context: DaoContractContext | ContractContext,
+    metricQuery?: IntervalMetricQuery,
+  ): Promise<DailyCountDto[]> {
+    const { interval } = metricQuery;
+
+    let queryBuilder = this.getUsersTotalQueryBuilder(context, metricQuery);
+    queryBuilder = this.addIntervalSelection(queryBuilder, interval);
+
+    return queryBuilder.execute();
   }
 
   async getInteractionsCount(
@@ -212,7 +228,8 @@ export class TransactionService {
     context: DaoContractContext | ContractContext,
     metricQuery?: MetricQuery,
   ): SelectQueryBuilder<Transaction> {
-    const { contractId, dao } = context as DaoContractContext;
+    const { contract, dao } = context as DaoContractContext;
+    const { contractId, contractName } = contract;
     const { from, to } = metricQuery || {};
 
     const qb = this.transactionRepository.createQueryBuilder();
@@ -221,6 +238,8 @@ export class TransactionService {
 
     if (dao) {
       qb.andWhere('receiver_account_id = :dao', { dao });
+    } else {
+      qb.andWhere('receiver_account_id like :id', { id: `%.${contractName}` });
     }
 
     if (from) {
@@ -241,7 +260,19 @@ export class TransactionService {
   ): SelectQueryBuilder<Transaction> {
     return qb
       .addSelect(
-        `date_trunc('day', to_timestamp(block_timestamp / 1000 / 1000 / 1000)) as day`,
+        `date_trunc('day', to_timestamp(block_timestamp / 1e9)) as day`,
+      )
+      .groupBy('day')
+      .orderBy('day', 'ASC');
+  }
+
+  private addIntervalSelection(
+    qb: SelectQueryBuilder<Transaction>,
+    interval: ActivityInterval,
+  ): SelectQueryBuilder<Transaction> {
+    return qb
+      .addSelect(
+        `date_trunc('${interval}', to_timestamp(block_timestamp / 1e9) + '1 ${interval}'::interval) as day`,
       )
       .groupBy('day')
       .orderBy('day', 'ASC');

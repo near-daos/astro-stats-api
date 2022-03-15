@@ -1,52 +1,53 @@
 import moment from 'moment';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 import {
   ContractContext,
   DaoContractContext,
-  DaoStatsHistoryService,
   DaoStatsMetric,
   LeaderboardMetricResponse,
   MetricQuery,
   MetricResponse,
-  MetricType,
+  ActivityInterval,
 } from '@dao-stats/common';
 import { TransactionService } from '@dao-stats/transaction';
+
 import { GeneralTotalResponse } from './dto';
 import { MetricService } from '../common/metric.service';
-import { getDailyIntervals, getGrowth, patchMetricDays } from '../utils';
+import { getDailyIntervals, getGrowth } from '../utils';
 
 @Injectable()
 export class GeneralService {
   constructor(
-    private readonly configService: ConfigService,
     private readonly transactionService: TransactionService,
-    private readonly daoStatsHistoryService: DaoStatsHistoryService,
     private readonly metricService: MetricService,
   ) {}
 
   async totals(
     context: DaoContractContext | ContractContext,
   ): Promise<GeneralTotalResponse> {
-    const dayAgo = moment().subtract(1, 'days');
+    const monthAgo = moment().subtract(1, 'month');
+    const twoMonthsAgo = moment().subtract(2, 'months');
 
-    const [dao, groups, averageGroups, activity, dayAgoActivity] =
+    const [dao, groups, averageGroups, activity, monthAgoActivity] =
       await Promise.all([
         this.metricService.total(context, DaoStatsMetric.DaoCount),
         this.metricService.total(context, DaoStatsMetric.GroupsCount),
         this.metricService.total(context, DaoStatsMetric.GroupsCount, true),
         this.transactionService.getContractActivityCount(context, {
-          to: dayAgo.valueOf(),
+          from: monthAgo.valueOf(),
         }),
-        this.transactionService.getContractActivityCount(context),
+        this.transactionService.getContractActivityCount(context, {
+          from: twoMonthsAgo.valueOf(),
+          to: monthAgo.valueOf(),
+        }),
       ]);
 
     return {
       dao,
       activity: {
         count: activity.count,
-        growth: getGrowth(activity.count, dayAgoActivity.count),
+        growth: getGrowth(activity.count, monthAgoActivity.count),
       },
       groups,
       averageGroups,
@@ -68,33 +69,31 @@ export class GeneralService {
     context: ContractContext,
     metricQuery: MetricQuery,
   ): Promise<MetricResponse> {
-    const metrics = await this.transactionService.getContractActivityCountDaily(
-      context,
-      metricQuery,
-    );
+    const metrics =
+      await this.transactionService.getContractActivityCountHistory(
+        context,
+        metricQuery,
+        ActivityInterval.Week,
+      );
 
     return {
-      metrics: patchMetricDays(
-        metricQuery,
-        metrics.map(({ day, count }) => ({
-          timestamp: moment(day).valueOf(),
-          count,
-        })),
-        MetricType.Daily,
-      ),
+      metrics: metrics.map(({ day, count }) => ({
+        timestamp: moment(day).valueOf(),
+        count,
+      })),
     };
   }
 
   async activeLeaderboard(
     context: ContractContext,
   ): Promise<LeaderboardMetricResponse> {
-    const weekAgo = moment().subtract(7, 'days');
-    const days = getDailyIntervals(weekAgo.valueOf(), moment().valueOf());
+    const monthAgo = moment().subtract(1, 'month');
+    const days = getDailyIntervals(monthAgo.valueOf(), moment().valueOf());
 
     const byDays = await this.transactionService.getActivityLeaderboard(
       context,
       {
-        from: weekAgo.valueOf(),
+        from: monthAgo.valueOf(),
         to: moment().valueOf(),
       },
       true,
