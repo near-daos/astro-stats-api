@@ -7,6 +7,7 @@ import {
   MetricQuery,
   MetricResponse,
   LeaderboardMetricResponse,
+  PaginationDto,
 } from '@dao-stats/common';
 
 import {
@@ -63,8 +64,9 @@ export class GovernanceController {
   @Get('/proposals/leaderboard')
   async proposalsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.governanceService.proposalsLeaderboard(context);
+    return this.governanceService.proposalsLeaderboard(context, query);
   }
 
   @ApiResponse({
@@ -92,8 +94,9 @@ export class GovernanceController {
   @Get('/proposals-types/leaderboard')
   async proposalsTypesLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<ProposalsTypesLeaderboardResponse> {
-    return this.governanceService.proposalsTypesLeaderboard(context);
+    return this.governanceService.proposalsTypesLeaderboard(context, query);
   }
 
   @ApiResponse({
@@ -121,8 +124,9 @@ export class GovernanceController {
   @Get('/vote-rate/leaderboard')
   async rateLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<VoteRateLeaderboardResponse> {
-    return this.governanceService.voteRateLeaderboard(context);
+    return this.governanceService.voteRateLeaderboard(context, query);
   }
 
   @ApiResponse({

@@ -5,6 +5,7 @@ import {
   ContractContext,
   DaoContractContext,
   MetricQuery,
+  PaginationDto,
 } from '@dao-stats/common';
 import { FlowMetricType } from '@dao-stats/receipt';
 import {
@@ -60,8 +61,9 @@ export class FlowController {
   @Get('/funds/leaderboard')
   async fundsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<FlowLeaderboardMetricResponse> {
-    return this.flowService.leaderboard(context, FlowMetricType.Fund);
+    return this.flowService.leaderboard(context, query, FlowMetricType.Fund);
   }
 
   @ApiResponse({
@@ -93,8 +95,13 @@ export class FlowController {
   @Get('/transactions/leaderboard')
   async transactionsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<FlowLeaderboardMetricResponse> {
-    return this.flowService.leaderboard(context, FlowMetricType.Transaction);
+    return this.flowService.leaderboard(
+      context,
+      query,
+      FlowMetricType.Transaction,
+    );
   }
 
   @ApiResponse({

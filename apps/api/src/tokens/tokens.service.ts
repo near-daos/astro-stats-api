@@ -6,6 +6,7 @@ import {
   DaoStatsMetric,
   LeaderboardMetricResponse,
   MetricQuery,
+  PaginationDto,
 } from '@dao-stats/common';
 import { TokensTotalResponse } from './dto/tokens-total.dto';
 import { MetricService } from '../common/metric.service';
@@ -65,22 +66,34 @@ export class TokensService {
 
   async ftsLeaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.metricService.leaderboard(context, DaoStatsMetric.FtsCount);
+    return this.metricService.leaderboard(
+      context,
+      pagination,
+      DaoStatsMetric.FtsCount,
+    );
   }
 
   async ftsValueLockedLeaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.metricService.leaderboard(
       context,
+      pagination,
       DaoStatsMetric.FtsValueLocked,
     );
   }
 
   async nftsLeaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.metricService.leaderboard(context, DaoStatsMetric.NftsCount);
+    return this.metricService.leaderboard(
+      context,
+      pagination,
+      DaoStatsMetric.NftsCount,
+    );
   }
 }

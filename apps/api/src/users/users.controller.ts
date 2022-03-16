@@ -8,6 +8,7 @@ import {
   MetricResponse,
   LeaderboardMetricResponse,
   IntervalMetricQuery,
+  PaginationDto,
 } from '@dao-stats/common';
 
 import { UsersTotalResponse } from './dto';
@@ -59,8 +60,9 @@ export class UsersController {
   @Get('/users/leaderboard')
   async usersLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.usersService.usersLeaderboard(context);
+    return this.usersService.usersLeaderboard(context, query);
   }
 
   @ApiResponse({
@@ -89,8 +91,13 @@ export class UsersController {
   async activeUsersLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
     @Query(MetricQueryPipe) metricQuery: IntervalMetricQuery,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.usersService.usersLeaderboard(context, metricQuery.interval);
+    return this.usersService.usersLeaderboard(
+      context,
+      query,
+      metricQuery.interval,
+    );
   }
 
   @ApiResponse({
@@ -118,8 +125,9 @@ export class UsersController {
   @Get('/members/leaderboard')
   async membersLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.usersService.membersLeaderboard(context);
+    return this.usersService.membersLeaderboard(context, query);
   }
 
   @ApiResponse({
@@ -162,8 +170,9 @@ export class UsersController {
   @Get('/interactions/leaderboard')
   async interactionsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.usersService.interactionsLeaderboard(context);
+    return this.usersService.interactionsLeaderboard(context, query);
   }
 
   @ApiResponse({

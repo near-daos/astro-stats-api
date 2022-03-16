@@ -9,6 +9,7 @@ import {
   MetricQuery,
   MetricResponse,
   ActivityInterval,
+  PaginationDto,
 } from '@dao-stats/common';
 import { TransactionService } from '@dao-stats/transaction';
 
@@ -86,6 +87,7 @@ export class GeneralService {
 
   async activeLeaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     const monthAgo = moment().subtract(1, 'month');
     const days = getDailyIntervals(monthAgo.valueOf(), moment().valueOf());
@@ -97,6 +99,7 @@ export class GeneralService {
         to: moment().valueOf(),
       },
       true,
+      pagination,
     );
 
     const dayAgo = moment().subtract(1, 'days');
@@ -105,6 +108,8 @@ export class GeneralService {
       {
         to: dayAgo.valueOf(),
       },
+      false,
+      pagination,
     );
 
     const totalActivity = await this.transactionService.getActivityLeaderboard(
@@ -112,6 +117,8 @@ export class GeneralService {
       {
         to: moment().valueOf(),
       },
+      false,
+      pagination,
     );
 
     const metrics = totalActivity.map(({ receiver_account_id: dao, count }) => {
@@ -154,8 +161,13 @@ export class GeneralService {
 
   async groupsLeaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.metricService.leaderboard(context, DaoStatsMetric.GroupsCount);
+    return this.metricService.leaderboard(
+      context,
+      pagination,
+      DaoStatsMetric.GroupsCount,
+    );
   }
 
   async averageGroups(

@@ -13,6 +13,7 @@ import {
   MetricQuery,
   MetricResponse,
   MetricType,
+  PaginationDto,
   TransactionType,
 } from '@dao-stats/common';
 import { TransactionService } from '@dao-stats/transaction';
@@ -155,9 +156,11 @@ export class GovernanceService {
 
   async proposalsLeaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.metricService.leaderboard(
       context,
+      pagination,
       DaoStatsMetric.ProposalsCount,
     );
   }
@@ -237,12 +240,16 @@ export class GovernanceService {
 
   async proposalsTypesLeaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
   ): Promise<ProposalsTypesLeaderboardResponse> {
     const { contractId } = context;
+    const { offset, limit } = pagination;
 
     const daos = await this.daoStatsService.getLeaderboard({
       contractId,
       metric: DaoStatsMetric.ProposalsCount,
+      offset,
+      limit,
     });
 
     const leaderboard = await Promise.all(
@@ -324,6 +331,7 @@ export class GovernanceService {
 
   async voteRateLeaderboard(
     context: DaoContractContext | ContractContext,
+    pagination: PaginationDto,
   ): Promise<VoteRateLeaderboardResponse> {
     const { contractId, dao } = context as DaoContractContext;
 
@@ -335,13 +343,13 @@ export class GovernanceService {
         contractId,
         dao,
         metric: DaoStatsMetric.ProposalsCount,
-        limit: 0,
+        ...pagination,
       }),
       this.daoStatsService.getLeaderboard({
         contractId,
         dao,
         metric: DaoStatsMetric.ProposalsApprovedCount,
-        limit: 0,
+        ...pagination,
       }),
     ]);
 

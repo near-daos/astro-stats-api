@@ -10,6 +10,7 @@ import {
   MetricQuery,
   MetricResponse,
   MetricType,
+  PaginationDto,
   TotalMetric,
 } from '@dao-stats/common';
 import { getGrowth, patchMetricDays } from '../utils';
@@ -84,9 +85,11 @@ export class MetricService {
 
   async leaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
     metric: DaoStatsMetric | DaoStatsMetric[],
   ): Promise<LeaderboardMetricResponse> {
     const { contractId } = context;
+    const { offset, limit } = pagination;
 
     const dayAgo = moment().subtract(1, 'day');
     const monthAgo = moment().subtract(1, 'month');
@@ -94,6 +97,8 @@ export class MetricService {
     const leaderboard = await this.daoStatsService.getLeaderboard({
       contractId,
       metric,
+      offset,
+      limit,
     });
 
     const metrics = await Promise.all(

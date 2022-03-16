@@ -13,6 +13,7 @@ import {
   TransactionType,
   ActivityInterval,
   IntervalMetricQuery,
+  PaginationDto,
 } from '@dao-stats/common';
 
 import { TransactionLeaderboardDto } from './dto/transaction-leaderboard.dto';
@@ -163,6 +164,7 @@ export class TransactionService {
     context: DaoContractContext | ContractContext,
     metricQuery?: MetricQuery,
     daily?: boolean,
+    pagination?: PaginationDto,
   ): Promise<any[]> {
     let queryBuilder = this.getActivityIntervalQueryBuilder(
       context,
@@ -173,6 +175,8 @@ export class TransactionService {
 
     if (daily) {
       queryBuilder = this.addDailySelection(queryBuilder);
+    } else if (pagination.limit) {
+      queryBuilder.offset(pagination.offset || 0).limit(pagination.limit);
     } else {
       queryBuilder.limit(10);
     }

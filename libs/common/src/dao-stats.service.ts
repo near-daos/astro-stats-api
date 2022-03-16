@@ -15,6 +15,7 @@ export interface DaoStatsLeaderboardParams {
   contractId: string;
   dao?: string;
   metric: DaoStatsMetric | DaoStatsMetric[];
+  offset?: number;
   limit?: number;
 }
 
@@ -94,6 +95,7 @@ export class DaoStatsService {
     contractId,
     dao,
     metric,
+    offset = 0,
     limit = 10,
   }: DaoStatsLeaderboardParams): Promise<DaoStatsLeaderboardResponse> {
     const query = this.repository
@@ -116,10 +118,9 @@ export class DaoStatsService {
     const result = await query
       .groupBy('dao')
       .orderBy('value', 'DESC')
-      .take(limit)
       .execute();
 
-    return result.map(({ dao, value }) => ({
+    return result.slice(offset, offset + limit).map(({ dao, value }) => ({
       dao,
       value: parseFloat(value),
     }));
