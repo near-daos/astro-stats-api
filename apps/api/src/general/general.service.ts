@@ -69,13 +69,13 @@ export class GeneralService {
 
   async active(
     context: ContractContext,
-    metricQuery: IntervalMetricQuery,
+    metricQuery: IntervalMetricQuery | MetricQuery,
   ): Promise<MetricResponse> {
     const metrics =
       await this.transactionService.getContractActivityCountHistory(
         context,
         metricQuery,
-        metricQuery.interval,
+        (metricQuery as IntervalMetricQuery).interval || ActivityInterval.Week,
       );
 
     return {
