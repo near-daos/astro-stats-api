@@ -7,6 +7,7 @@ import {
   MetricResponse,
   MetricQuery,
   LeaderboardMetricResponse,
+  PaginationDto,
 } from '@dao-stats/common';
 import { GeneralTotalResponse } from './dto';
 import { GeneralService } from './general.service';
@@ -72,8 +73,9 @@ export class GeneralController {
   @Get('/active/leaderboard')
   async activeLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.generalService.activeLeaderboard(context);
+    return this.generalService.activeLeaderboard(context, query);
   }
 
   @ApiResponse({
@@ -101,8 +103,9 @@ export class GeneralController {
   @Get('/groups/leaderboard')
   async groupsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.generalService.groupsLeaderboard(context);
+    return this.generalService.groupsLeaderboard(context, query);
   }
 
   @ApiResponse({

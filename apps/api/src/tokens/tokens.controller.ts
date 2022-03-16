@@ -7,6 +7,7 @@ import {
   LeaderboardMetricResponse,
   MetricQuery,
   MetricResponse,
+  PaginationDto,
 } from '@dao-stats/common';
 
 import { TokensTotalResponse } from './dto';
@@ -58,8 +59,9 @@ export class TokensController {
   @Get('/fts/leaderboard')
   async ftsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.tokensService.ftsLeaderboard(context);
+    return this.tokensService.ftsLeaderboard(context, query);
   }
 
   @ApiResponse({
@@ -87,8 +89,9 @@ export class TokensController {
   @Get('/fts-vl/leaderboard')
   async ftsValueLockedLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.tokensService.ftsValueLockedLeaderboard(context);
+    return this.tokensService.ftsValueLockedLeaderboard(context, query);
   }
 
   @ApiResponse({
@@ -116,8 +119,9 @@ export class TokensController {
   @Get('/nfts/leaderboard')
   async nftsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.tokensService.nftsLeaderboard(context);
+    return this.tokensService.nftsLeaderboard(context, query);
   }
 
   @ApiResponse({

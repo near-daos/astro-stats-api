@@ -7,6 +7,7 @@ import {
   LeaderboardMetricResponse,
   MetricQuery,
   MetricResponse,
+  PaginationDto,
 } from '@dao-stats/common';
 
 import { TvlTotalResponse, TvlDaoTotalResponse } from './dto';
@@ -58,8 +59,9 @@ export class TvlController {
   @Get('/tvl/leaderboard')
   async tvlLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.tvlService.tvlLeaderboard(context);
+    return this.tvlService.tvlLeaderboard(context, query);
   }
 
   @ApiResponse({
@@ -87,8 +89,12 @@ export class TvlController {
   @Get('/bounties-and-grants-vl/leaderboard')
   async bountiesAndGrantsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
+    @Query() query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.tvlService.bountiesAndGrantsValueLockedLeaderboard(context);
+    return this.tvlService.bountiesAndGrantsValueLockedLeaderboard(
+      context,
+      query,
+    );
   }
 
   @ApiResponse({

@@ -12,6 +12,7 @@ export * from './leaderboard-metric-response.dto';
 export * from './metric.dto';
 export * from './metric-query.dto';
 export * from './metric-response.dto';
+export * from './pagination.dto';
 export * from './receipt.dto';
 export * from './receipt-action.dto';
 export * from './total.dto';

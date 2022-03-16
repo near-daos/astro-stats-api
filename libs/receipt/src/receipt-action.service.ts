@@ -8,6 +8,7 @@ import {
   DaoContractContext,
   MetricQuery,
   millisToNanos,
+  PaginationDto,
   ReceiptAction,
 } from '@dao-stats/common';
 import { TransferType } from './types/transfer-type';
@@ -61,6 +62,7 @@ export class ReceiptActionService {
     transferType?: TransferType,
     metricQuery?: MetricQuery,
     daily?: boolean,
+    pagination?: PaginationDto,
   ): Promise<any[]> {
     const qb = this.getTransferIntervalQueryBuilder(
       context,
@@ -78,7 +80,9 @@ export class ReceiptActionService {
       .addGroupBy('account_id')
       .addOrderBy('count', 'DESC');
 
-    if (!daily) {
+    if (pagination?.limit) {
+      qb.offset(pagination.offset || 0).limit(pagination.limit);
+    } else if (!daily) {
       qb.limit(10);
     }
 

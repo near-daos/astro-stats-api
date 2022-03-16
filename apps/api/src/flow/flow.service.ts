@@ -6,6 +6,7 @@ import {
   DaoContractContext,
   LeaderboardMetric,
   MetricQuery,
+  PaginationDto,
 } from '@dao-stats/common';
 import {
   FlowMetricType,
@@ -169,6 +170,7 @@ export class FlowService {
 
   async leaderboard(
     context: DaoContractContext | ContractContext,
+    pagination: PaginationDto,
     metricType: FlowMetricType,
   ): Promise<FlowLeaderboardMetricResponse> {
     const { contract } = context;
@@ -194,6 +196,7 @@ export class FlowService {
           to: moment().valueOf(),
         },
         true,
+        pagination,
       ),
       this.receiptActionService.getLeaderboard(
         context,
@@ -204,6 +207,7 @@ export class FlowService {
           to: moment().valueOf(),
         },
         true,
+        pagination,
       ),
       this.receiptActionService.getLeaderboard(
         context,
@@ -212,6 +216,8 @@ export class FlowService {
         {
           to: dayAgo.valueOf(),
         },
+        false,
+        pagination,
       ),
       this.receiptActionService.getLeaderboard(
         context,
@@ -220,6 +226,8 @@ export class FlowService {
         {
           to: moment().valueOf(),
         },
+        false,
+        pagination,
       ),
       this.receiptActionService.getLeaderboard(
         context,
@@ -228,6 +236,8 @@ export class FlowService {
         {
           to: dayAgo.valueOf(),
         },
+        false,
+        pagination,
       ),
       this.receiptActionService.getLeaderboard(
         context,
@@ -236,6 +246,8 @@ export class FlowService {
         {
           to: moment().valueOf(),
         },
+        false,
+        pagination,
       ),
     ]);
 

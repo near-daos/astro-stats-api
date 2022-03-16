@@ -15,6 +15,7 @@ import {
   MetricType,
   ActivityInterval,
   IntervalMetricQuery,
+  PaginationDto,
 } from '@dao-stats/common';
 import { TransactionService } from '@dao-stats/transaction';
 
@@ -144,6 +145,7 @@ export class UsersService {
 
   async usersLeaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
     interval?: ActivityInterval,
   ): Promise<LeaderboardMetricResponse> {
     const monthAgo = moment().subtract(1, 'month');
@@ -172,8 +174,9 @@ export class UsersService {
       }),
     ]);
 
+    const { offset = 0, limit = 10 } = pagination;
     const metrics = totalActivity
-      .slice(0, 10)
+      .slice(offset, offset + limit)
       .map(({ receiver_account_id: dao, count }) => {
         const dayAgoCount =
           dayAgoActivity.find(
@@ -231,8 +234,13 @@ export class UsersService {
 
   async membersLeaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
-    return this.metricService.leaderboard(context, DaoStatsMetric.MembersCount);
+    return this.metricService.leaderboard(
+      context,
+      pagination,
+      DaoStatsMetric.MembersCount,
+    );
   }
 
   async averageUsers(
@@ -281,6 +289,7 @@ export class UsersService {
 
   async interactionsLeaderboard(
     context: ContractContext,
+    pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     const monthAgo = moment().subtract(1, 'month');
     const days = getDailyIntervals(monthAgo.valueOf(), moment().valueOf());
@@ -294,13 +303,24 @@ export class UsersService {
           to: moment().valueOf(),
         },
         true,
+        pagination,
       ),
-      this.transactionService.getActivityLeaderboard(context, {
-        to: dayAgo.valueOf(),
-      }),
-      this.transactionService.getActivityLeaderboard(context, {
-        to: moment().valueOf(),
-      }),
+      this.transactionService.getActivityLeaderboard(
+        context,
+        {
+          to: dayAgo.valueOf(),
+        },
+        false,
+        pagination,
+      ),
+      this.transactionService.getActivityLeaderboard(
+        context,
+        {
+          to: moment().valueOf(),
+        },
+        false,
+        pagination,
+      ),
     ]);
 
     const metrics = totalActivity.map(({ receiver_account_id: dao, count }) => {

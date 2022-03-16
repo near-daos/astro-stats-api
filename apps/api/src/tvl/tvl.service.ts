@@ -10,6 +10,7 @@ import {
   LeaderboardMetricResponse,
   MetricQuery,
   MetricResponse,
+  PaginationDto,
 } from '@dao-stats/common';
 import { TvlTotalResponse } from './dto/tvl-total.dto';
 import { TvlDaoTotalResponse } from './dto/tvl-dao-total.dto';
@@ -84,9 +85,11 @@ export class TvlService {
 
   async tvlLeaderboard(
     context: ContractContext | DaoContractContext,
+    pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.metricService.leaderboard(
       context,
+      pagination,
       DaoStatsMetricGroup.TotalValueLocked,
     );
   }
@@ -104,9 +107,11 @@ export class TvlService {
 
   async bountiesAndGrantsValueLockedLeaderboard(
     context: ContractContext | DaoContractContext,
+    pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.metricService.leaderboard(
       context,
+      pagination,
       DaoStatsMetricGroup.BountiesAndGrantsValueLocked,
     );
   }
