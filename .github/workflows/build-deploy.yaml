@@ -38,7 +38,7 @@ jobs:
           elif [[ "${{ github.ref }}" =~ ^refs/heads/develop ]]
           then
             echo "::set-output name=environment::development"
-            echo "::set-output name=namespace::ds-d"
+            echo "::set-output name=namespace::astro-stats-development"
             echo "::set-output name=k8s_ingress_host::dev.api.astrostats.magicpowered.io"
             echo "::set-output name=docker_env_tag::develop-$GITHUB_SHA"
           fi
