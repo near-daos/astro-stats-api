@@ -10,6 +10,7 @@ import {
   MetricResponse,
   ActivityInterval,
   PaginationDto,
+  IntervalMetricQuery,
 } from '@dao-stats/common';
 import { TransactionService } from '@dao-stats/transaction';
 
@@ -68,13 +69,13 @@ export class GeneralService {
 
   async active(
     context: ContractContext,
-    metricQuery: MetricQuery,
+    metricQuery: IntervalMetricQuery,
   ): Promise<MetricResponse> {
     const metrics =
       await this.transactionService.getContractActivityCountHistory(
         context,
         metricQuery,
-        ActivityInterval.Week,
+        metricQuery.interval,
       );
 
     return {

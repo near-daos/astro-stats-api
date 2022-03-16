@@ -8,6 +8,7 @@ import {
   MetricQuery,
   LeaderboardMetricResponse,
   PaginationDto,
+  IntervalMetricQuery,
 } from '@dao-stats/common';
 import { GeneralTotalResponse } from './dto';
 import { GeneralService } from './general.service';
@@ -58,7 +59,7 @@ export class GeneralController {
   @Get('/active')
   async active(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query(MetricQueryPipe) metricQuery: MetricQuery,
+    @Query(MetricQueryPipe) metricQuery: IntervalMetricQuery,
   ): Promise<MetricResponse> {
     return this.generalService.active(context, metricQuery);
   }
