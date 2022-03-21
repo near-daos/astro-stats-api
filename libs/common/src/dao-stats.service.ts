@@ -118,9 +118,12 @@ export class DaoStatsService {
     const result = await query
       .groupBy('dao')
       .orderBy('value', 'DESC')
+      .addOrderBy('dao', 'ASC')
+      .offset(offset)
+      .limit(limit)
       .execute();
 
-    return result.slice(offset, offset + limit).map(({ dao, value }) => ({
+    return result.map(({ dao, value }) => ({
       dao,
       value: parseFloat(value),
     }));
