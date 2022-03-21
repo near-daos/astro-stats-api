@@ -15,7 +15,11 @@ import {
 } from './dto';
 import { FlowService } from './flow.service';
 import { HasDaoContractContext } from '../decorators';
-import { ContractContextPipe, MetricQueryPipe } from '../pipes';
+import {
+  ContractContextPipe,
+  MetricQueryPipe,
+  PaginationQueryPipe,
+} from '../pipes';
 
 @ApiTags('Flow')
 @Controller('flow')
@@ -61,7 +65,7 @@ export class FlowController {
   @Get('/funds/leaderboard')
   async fundsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<FlowLeaderboardMetricResponse> {
     return this.flowService.leaderboard(context, query, FlowMetricType.Fund);
   }
@@ -95,7 +99,7 @@ export class FlowController {
   @Get('/transactions/leaderboard')
   async transactionsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<FlowLeaderboardMetricResponse> {
     return this.flowService.leaderboard(
       context,

@@ -12,7 +12,11 @@ import {
 
 import { TvlTotalResponse, TvlDaoTotalResponse } from './dto';
 import { TvlService } from './tvl.service';
-import { ContractContextPipe, MetricQueryPipe } from '../pipes';
+import {
+  ContractContextPipe,
+  MetricQueryPipe,
+  PaginationQueryPipe,
+} from '../pipes';
 import { HasDaoContractContext } from '../decorators';
 
 @ApiTags('TVL')
@@ -59,7 +63,7 @@ export class TvlController {
   @Get('/tvl/leaderboard')
   async tvlLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.tvlService.tvlLeaderboard(context, query);
   }
@@ -89,7 +93,7 @@ export class TvlController {
   @Get('/bounties-and-grants-vl/leaderboard')
   async bountiesAndGrantsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.tvlService.bountiesAndGrantsValueLockedLeaderboard(
       context,

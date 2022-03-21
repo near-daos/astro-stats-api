@@ -12,7 +12,11 @@ import {
 
 import { TokensTotalResponse } from './dto';
 import { TokensService } from './tokens.service';
-import { ContractContextPipe, MetricQueryPipe } from '../pipes';
+import {
+  ContractContextPipe,
+  MetricQueryPipe,
+  PaginationQueryPipe,
+} from '../pipes';
 import { HasDaoContractContext } from '../decorators';
 
 @ApiTags('Tokens')
@@ -59,7 +63,7 @@ export class TokensController {
   @Get('/fts/leaderboard')
   async ftsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.tokensService.ftsLeaderboard(context, query);
   }
@@ -89,7 +93,7 @@ export class TokensController {
   @Get('/fts-vl/leaderboard')
   async ftsValueLockedLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.tokensService.ftsValueLockedLeaderboard(context, query);
   }
@@ -119,7 +123,7 @@ export class TokensController {
   @Get('/nfts/leaderboard')
   async nftsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.tokensService.nftsLeaderboard(context, query);
   }
