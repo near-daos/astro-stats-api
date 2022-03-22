@@ -4,4 +4,7 @@ import { ProposalsTypesLeaderboard } from './proposals-types-leaderboard.dto';
 export class ProposalsTypesLeaderboardResponse {
   @ApiProperty({ type: [ProposalsTypesLeaderboard] })
   leaderboard: ProposalsTypesLeaderboard[];
+
+  @ApiProperty()
+  total: number;
 }

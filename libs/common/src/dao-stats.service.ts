@@ -24,7 +24,10 @@ export interface DaoStatsLeaderboard {
   value: number;
 }
 
-export type DaoStatsLeaderboardResponse = DaoStatsLeaderboard[];
+export interface DaoStatsLeaderboardResponse {
+  data: DaoStatsLeaderboard[];
+  total: number;
+}
 
 @Injectable()
 export class DaoStatsService {
@@ -95,8 +98,8 @@ export class DaoStatsService {
     contractId,
     dao,
     metric,
-    offset = 0,
-    limit = 10,
+    offset,
+    limit,
   }: DaoStatsLeaderboardParams): Promise<DaoStatsLeaderboardResponse> {
     const query = this.repository
       .createQueryBuilder()
@@ -115,17 +118,24 @@ export class DaoStatsService {
       query.andWhere('metric = :metric', { metric });
     }
 
-    const result = await query
+    query
       .groupBy('dao')
       .orderBy('value', 'DESC')
       .addOrderBy('dao', 'ASC')
       .offset(offset)
-      .limit(limit)
-      .execute();
+      .limit(limit);
 
-    return result.map(({ dao, value }) => ({
-      dao,
-      value: parseFloat(value),
-    }));
+    const [result, total] = await Promise.all([
+      query.clone().execute(),
+      query.clone().getCount(),
+    ]);
+
+    return {
+      data: result.map(({ dao, value }) => ({
+        dao,
+        value: parseFloat(value),
+      })),
+      total,
+    };
   }
 }
