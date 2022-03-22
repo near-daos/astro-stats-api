@@ -103,7 +103,6 @@ export class DaoStatsService {
   }: DaoStatsLeaderboardParams): Promise<DaoStatsLeaderboardResponse> {
     const query = this.repository
       .createQueryBuilder()
-      .select(`dao, sum(value) as value`)
       .where('contract_id = :contractId', { contractId });
 
     if (Array.isArray(dao)) {
@@ -118,16 +117,20 @@ export class DaoStatsService {
       query.andWhere('metric = :metric', { metric });
     }
 
-    query
+    const selectQuery = query
+      .clone()
+      .select(`dao, sum(value) as value`)
       .groupBy('dao')
       .orderBy('value', 'DESC')
       .addOrderBy('dao', 'ASC')
       .offset(offset)
       .limit(limit);
 
-    const [result, total] = await Promise.all([
-      query.clone().execute(),
-      query.clone().getCount(),
+    const countQuery = query.clone().select('count(distinct dao) as cnt');
+
+    const [result, count] = await Promise.all([
+      selectQuery.execute(),
+      countQuery.getRawOne(),
     ]);
 
     return {
@@ -135,7 +138,7 @@ export class DaoStatsService {
         dao,
         value: parseFloat(value),
       })),
-      total,
+      total: parseInt(count['cnt']),
     };
   }
 }
