@@ -90,37 +90,40 @@ export class GeneralService {
     context: ContractContext,
     pagination: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
+    const dayAgo = moment().subtract(1, 'days');
     const monthAgo = moment().subtract(1, 'month');
     const days = getDailyIntervals(monthAgo.valueOf(), moment().valueOf());
 
-    const byDays = await this.transactionService.getActivityLeaderboard(
-      context,
-      {
-        from: monthAgo.valueOf(),
+    const [byDays, dayAgoActivity, totalActivity, total] = await Promise.all([
+      this.transactionService.getActivityLeaderboard(
+        context,
+        {
+          from: monthAgo.valueOf(),
+          to: moment().valueOf(),
+        },
+        true,
+        pagination,
+      ),
+      this.transactionService.getActivityLeaderboard(
+        context,
+        {
+          to: dayAgo.valueOf(),
+        },
+        false,
+        pagination,
+      ),
+      this.transactionService.getActivityLeaderboard(
+        context,
+        {
+          to: moment().valueOf(),
+        },
+        false,
+        pagination,
+      ),
+      this.transactionService.getActivityLeaderboardTotal(context, {
         to: moment().valueOf(),
-      },
-      true,
-      pagination,
-    );
-
-    const dayAgo = moment().subtract(1, 'days');
-    const dayAgoActivity = await this.transactionService.getActivityLeaderboard(
-      context,
-      {
-        to: dayAgo.valueOf(),
-      },
-      false,
-      pagination,
-    );
-
-    const totalActivity = await this.transactionService.getActivityLeaderboard(
-      context,
-      {
-        to: moment().valueOf(),
-      },
-      false,
-      pagination,
-    );
+      }),
+    ]);
 
     const metrics = totalActivity.map(({ receiver_account_id: dao, count }) => {
       const dayAgoCount =
@@ -146,7 +149,7 @@ export class GeneralService {
       };
     });
 
-    return { metrics };
+    return { metrics, total };
   }
 
   async groups(

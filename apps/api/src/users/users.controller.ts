@@ -13,7 +13,11 @@ import {
 
 import { UsersTotalResponse } from './dto';
 import { UsersService } from './users.service';
-import { ContractContextPipe, MetricQueryPipe } from '../pipes';
+import {
+  ContractContextPipe,
+  MetricQueryPipe,
+  PaginationQueryPipe,
+} from '../pipes';
 import { HasDaoContractContext } from '../decorators';
 
 @ApiTags('Users')
@@ -60,7 +64,7 @@ export class UsersController {
   @Get('/users/leaderboard')
   async usersLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.usersService.usersLeaderboard(context, query);
   }
@@ -91,7 +95,7 @@ export class UsersController {
   async activeUsersLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
     @Query(MetricQueryPipe) metricQuery: IntervalMetricQuery,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.usersService.usersLeaderboard(
       context,
@@ -125,7 +129,7 @@ export class UsersController {
   @Get('/members/leaderboard')
   async membersLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.usersService.membersLeaderboard(context, query);
   }
@@ -170,7 +174,7 @@ export class UsersController {
   @Get('/interactions/leaderboard')
   async interactionsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.usersService.interactionsLeaderboard(context, query);
   }

@@ -184,8 +184,10 @@ export class FlowService {
       byDaysOutgoing,
       dayAgoIncoming,
       incoming,
+      incomingTotal,
       dayAgoOutgoing,
       outgoing,
+      outgoingTotal,
     ] = await Promise.all([
       this.receiptActionService.getLeaderboard(
         context,
@@ -229,6 +231,14 @@ export class FlowService {
         false,
         pagination,
       ),
+      this.receiptActionService.getLeaderboardTotal(
+        context,
+        metricType,
+        TransferType.Incoming,
+        {
+          to: moment().valueOf(),
+        },
+      ),
       this.receiptActionService.getLeaderboard(
         context,
         metricType,
@@ -249,6 +259,14 @@ export class FlowService {
         false,
         pagination,
       ),
+      this.receiptActionService.getLeaderboardTotal(
+        context,
+        metricType,
+        TransferType.Outgoing,
+        {
+          to: moment().valueOf(),
+        },
+      ),
     ]);
 
     return {
@@ -268,6 +286,8 @@ export class FlowService {
         days,
         contract,
       ),
+      incomingTotal,
+      outgoingTotal,
     };
   }
 

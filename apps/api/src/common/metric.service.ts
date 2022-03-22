@@ -94,12 +94,13 @@ export class MetricService {
     const dayAgo = moment().subtract(1, 'day');
     const monthAgo = moment().subtract(1, 'month');
 
-    const leaderboard = await this.daoStatsService.getLeaderboard({
-      contractId,
-      metric,
-      offset,
-      limit,
-    });
+    const { data: leaderboard, total } =
+      await this.daoStatsService.getLeaderboard({
+        contractId,
+        metric,
+        offset,
+        limit,
+      });
 
     const metrics = await Promise.all(
       leaderboard.map(async ({ dao, value }) => {
@@ -132,6 +133,6 @@ export class MetricService {
       }),
     );
 
-    return { metrics };
+    return { metrics, total };
   }
 }

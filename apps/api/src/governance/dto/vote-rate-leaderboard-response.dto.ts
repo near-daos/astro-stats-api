@@ -4,4 +4,7 @@ import { VoteRateLeaderboard } from './vote-rate-leaderboard.dto';
 export class VoteRateLeaderboardResponse {
   @ApiProperty({ type: [VoteRateLeaderboard] })
   metrics: VoteRateLeaderboard[];
+
+  @ApiProperty()
+  total: number;
 }

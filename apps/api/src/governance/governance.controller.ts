@@ -17,7 +17,11 @@ import {
   VoteRateLeaderboardResponse,
 } from './dto';
 import { GovernanceService } from './governance.service';
-import { ContractContextPipe, MetricQueryPipe } from '../pipes';
+import {
+  ContractContextPipe,
+  MetricQueryPipe,
+  PaginationQueryPipe,
+} from '../pipes';
 import { HasDaoContractContext } from '../decorators';
 
 @ApiTags('Governance')
@@ -64,7 +68,7 @@ export class GovernanceController {
   @Get('/proposals/leaderboard')
   async proposalsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.governanceService.proposalsLeaderboard(context, query);
   }
@@ -94,7 +98,7 @@ export class GovernanceController {
   @Get('/proposals-types/leaderboard')
   async proposalsTypesLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<ProposalsTypesLeaderboardResponse> {
     return this.governanceService.proposalsTypesLeaderboard(context, query);
   }
@@ -124,7 +128,7 @@ export class GovernanceController {
   @Get('/vote-rate/leaderboard')
   async rateLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<VoteRateLeaderboardResponse> {
     return this.governanceService.voteRateLeaderboard(context, query);
   }
