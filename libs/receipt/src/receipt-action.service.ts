@@ -80,13 +80,34 @@ export class ReceiptActionService {
       .addGroupBy('account_id')
       .addOrderBy('count', 'DESC');
 
-    if (pagination?.limit) {
-      qb.offset(pagination.offset || 0).limit(pagination.limit);
-    } else if (!daily) {
-      qb.limit(10);
+    if (!daily) {
+      qb.offset(pagination.offset).limit(pagination.limit);
     }
 
     return qb.execute();
+  }
+
+  async getLeaderboardTotal(
+    context: DaoContractContext | ContractContext,
+    metricType: FlowMetricType,
+    transferType?: TransferType,
+    metricQuery?: MetricQuery,
+  ): Promise<number> {
+    const distinct = `receipt_${
+      transferType === TransferType.Incoming ? 'receiver' : 'predecessor'
+    }_account_id`;
+
+    const qb = this.getTransferIntervalQueryBuilder(
+      context,
+      metricType,
+      transferType,
+      metricQuery,
+      false,
+    ).select(`count(distinct ${distinct}) as cnt`);
+
+    const result = await qb.getRawOne();
+
+    return parseInt(result['cnt']);
   }
 
   private getTransferIntervalQueryBuilder(

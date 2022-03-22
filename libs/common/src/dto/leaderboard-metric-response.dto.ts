@@ -6,5 +6,5 @@ export class LeaderboardMetricResponse {
   metrics: LeaderboardMetric[];
 
   @ApiProperty()
-  total?: number;
+  total: number;
 }
