@@ -24,7 +24,10 @@ export interface DaoStatsLeaderboard {
   value: number;
 }
 
-export type DaoStatsLeaderboardResponse = DaoStatsLeaderboard[];
+export interface DaoStatsLeaderboardResponse {
+  data: DaoStatsLeaderboard[];
+  total: number;
+}
 
 @Injectable()
 export class DaoStatsService {
@@ -95,12 +98,11 @@ export class DaoStatsService {
     contractId,
     dao,
     metric,
-    offset = 0,
-    limit = 10,
+    offset,
+    limit,
   }: DaoStatsLeaderboardParams): Promise<DaoStatsLeaderboardResponse> {
     const query = this.repository
       .createQueryBuilder()
-      .select(`dao, sum(value) as value`)
       .where('contract_id = :contractId', { contractId });
 
     if (Array.isArray(dao)) {
@@ -115,14 +117,28 @@ export class DaoStatsService {
       query.andWhere('metric = :metric', { metric });
     }
 
-    const result = await query
+    const selectQuery = query
+      .clone()
+      .select(`dao, sum(value) as value`)
       .groupBy('dao')
       .orderBy('value', 'DESC')
-      .execute();
+      .addOrderBy('dao', 'ASC')
+      .offset(offset)
+      .limit(limit);
 
-    return result.slice(offset, offset + limit).map(({ dao, value }) => ({
-      dao,
-      value: parseFloat(value),
-    }));
+    const countQuery = query.clone().select('count(distinct dao) as cnt');
+
+    const [result, count] = await Promise.all([
+      selectQuery.execute(),
+      countQuery.getRawOne(),
+    ]);
+
+    return {
+      data: result.map(({ dao, value }) => ({
+        dao,
+        value: parseFloat(value),
+      })),
+      total: parseInt(count['cnt']),
+    };
   }
 }

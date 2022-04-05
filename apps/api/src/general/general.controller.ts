@@ -12,7 +12,11 @@ import {
 } from '@dao-stats/common';
 import { GeneralTotalResponse } from './dto';
 import { GeneralService } from './general.service';
-import { ContractContextPipe, MetricQueryPipe } from '../pipes';
+import {
+  ContractContextPipe,
+  MetricQueryPipe,
+  PaginationQueryPipe,
+} from '../pipes';
 import { HasDaoContractContext } from '../decorators';
 
 @ApiTags('General')
@@ -74,7 +78,7 @@ export class GeneralController {
   @Get('/active/leaderboard')
   async activeLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.generalService.activeLeaderboard(context, query);
   }
@@ -104,7 +108,7 @@ export class GeneralController {
   @Get('/groups/leaderboard')
   async groupsLeaderboard(
     @Param(ContractContextPipe) context: ContractContext,
-    @Query() query: PaginationDto,
+    @Query(PaginationQueryPipe) query: PaginationDto,
   ): Promise<LeaderboardMetricResponse> {
     return this.generalService.groupsLeaderboard(context, query);
   }

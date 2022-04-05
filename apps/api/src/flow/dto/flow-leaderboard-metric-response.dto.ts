@@ -7,4 +7,10 @@ export class FlowLeaderboardMetricResponse {
 
   @ApiProperty({ type: [LeaderboardMetric] })
   outgoing: LeaderboardMetric[];
+
+  @ApiProperty()
+  incomingTotal: number;
+
+  @ApiProperty()
+  outgoingTotal: number;
 }

@@ -175,16 +175,28 @@ export class TransactionService {
 
     if (daily) {
       queryBuilder = this.addDailySelection(queryBuilder);
-    } else if (pagination.limit) {
-      queryBuilder.offset(pagination.offset || 0).limit(pagination.limit);
     } else {
-      queryBuilder.limit(10);
+      queryBuilder.offset(pagination.offset).limit(pagination.limit);
     }
 
     return queryBuilder
       .addGroupBy('receiver_account_id')
       .addOrderBy('count', 'DESC')
       .execute();
+  }
+
+  async getActivityLeaderboardTotal(
+    context: DaoContractContext | ContractContext,
+    metricQuery?: MetricQuery,
+  ): Promise<number> {
+    const queryBuilder = this.getActivityIntervalQueryBuilder(
+      context,
+      metricQuery,
+    ).select(`count(distinct receiver_account_id) as cnt`);
+
+    const result = await queryBuilder.getRawOne();
+
+    return parseInt(result['cnt']);
   }
 
   private getContractActivityCountQuery(

@@ -201,7 +201,7 @@ export class UsersService {
         };
       });
 
-    return { metrics };
+    return { metrics, total: totalActivity.length };
   }
 
   async activeUsers(
@@ -295,7 +295,7 @@ export class UsersService {
     const days = getDailyIntervals(monthAgo.valueOf(), moment().valueOf());
     const dayAgo = moment().subtract(1, 'days');
 
-    const [byDays, dayAgoActivity, totalActivity] = await Promise.all([
+    const [byDays, dayAgoActivity, totalActivity, total] = await Promise.all([
       this.transactionService.getActivityLeaderboard(
         context,
         {
@@ -321,6 +321,9 @@ export class UsersService {
         false,
         pagination,
       ),
+      this.transactionService.getActivityLeaderboardTotal(context, {
+        to: moment().valueOf(),
+      }),
     ]);
 
     const metrics = totalActivity.map(({ receiver_account_id: dao, count }) => {
@@ -347,7 +350,7 @@ export class UsersService {
       };
     });
 
-    return { metrics };
+    return { metrics, total };
   }
 
   async averageInteractions(

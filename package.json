@@ -33,6 +33,7 @@
     "migration:run": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run",
     "migration:generate": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:generate -n SchemaRefactoring",
     "migration:revert": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:revert",
+    "schema:log": "ts-node --transpile-only ./node_modules/typeorm/cli.js schema:log",
     "schema:sync": "ts-node --transpile-only ./node_modules/typeorm/cli.js schema:sync",
     "schema:drop": "ts-node --transpile-only ./node_modules/typeorm/cli.js schema:drop"
   },

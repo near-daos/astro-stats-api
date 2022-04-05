@@ -245,7 +245,7 @@ export class GovernanceService {
     const { contractId } = context;
     const { offset, limit } = pagination;
 
-    const daos = await this.daoStatsService.getLeaderboard({
+    const { data: daos, total } = await this.daoStatsService.getLeaderboard({
       contractId,
       metric: DaoStatsMetric.ProposalsCount,
       offset,
@@ -284,7 +284,7 @@ export class GovernanceService {
       }),
     );
 
-    return { leaderboard };
+    return { leaderboard, total };
   }
 
   async voteRate(
@@ -338,23 +338,22 @@ export class GovernanceService {
     const dayAgo = moment().subtract(1, 'days');
     const monthAgo = moment().subtract(30, 'month');
 
+    // TODO: add ProposalsVoteRate metric so we can select paginated data
     const [totalLeaderboard, approvedLeaderboard] = await Promise.all([
       this.daoStatsService.getLeaderboard({
         contractId,
         dao,
         metric: DaoStatsMetric.ProposalsCount,
-        ...pagination,
       }),
       this.daoStatsService.getLeaderboard({
         contractId,
         dao,
         metric: DaoStatsMetric.ProposalsApprovedCount,
-        ...pagination,
       }),
     ]);
 
-    const leaderboard = totalLeaderboard.map(({ dao, value }) => {
-      const approved = approvedLeaderboard.find((row) => dao === row.dao);
+    const leaderboard = totalLeaderboard.data.map(({ dao, value }) => {
+      const approved = approvedLeaderboard.data.find((row) => dao === row.dao);
       return {
         dao,
         total: value,
@@ -364,67 +363,68 @@ export class GovernanceService {
     });
 
     leaderboard.sort((a, b) => b.rate - a.rate);
-    leaderboard.splice(10);
 
     const metrics = await Promise.all(
-      leaderboard.map(async ({ dao, total, approved, rate }) => {
-        const [dayAgoTotal, dayAgoApproved, totalHistory, approvedHistory] =
-          await Promise.all([
-            this.daoStatsHistoryService.getLastValue({
-              contractId,
-              dao,
-              metric: DaoStatsMetric.ProposalsCount,
-              to: dayAgo.valueOf(),
-            }),
-            this.daoStatsHistoryService.getLastValue({
-              contractId,
-              dao,
-              metric: DaoStatsMetric.ProposalsApprovedCount,
-              to: dayAgo.valueOf(),
-            }),
-            this.daoStatsHistoryService.getHistory({
-              contractId,
-              dao,
-              metric: DaoStatsMetric.ProposalsCount,
-              from: monthAgo.valueOf(),
-            }),
-            this.daoStatsHistoryService.getHistory({
-              contractId,
-              dao,
-              metric: DaoStatsMetric.ProposalsApprovedCount,
-              from: monthAgo.valueOf(),
-            }),
-          ]);
+      leaderboard
+        .slice(pagination.offset, pagination.offset + pagination.limit)
+        .map(async ({ dao, total, approved, rate }) => {
+          const [dayAgoTotal, dayAgoApproved, totalHistory, approvedHistory] =
+            await Promise.all([
+              this.daoStatsHistoryService.getLastValue({
+                contractId,
+                dao,
+                metric: DaoStatsMetric.ProposalsCount,
+                to: dayAgo.valueOf(),
+              }),
+              this.daoStatsHistoryService.getLastValue({
+                contractId,
+                dao,
+                metric: DaoStatsMetric.ProposalsApprovedCount,
+                to: dayAgo.valueOf(),
+              }),
+              this.daoStatsHistoryService.getHistory({
+                contractId,
+                dao,
+                metric: DaoStatsMetric.ProposalsCount,
+                from: monthAgo.valueOf(),
+              }),
+              this.daoStatsHistoryService.getHistory({
+                contractId,
+                dao,
+                metric: DaoStatsMetric.ProposalsApprovedCount,
+                from: monthAgo.valueOf(),
+              }),
+            ]);
 
-        const dayAgoRate = getRate(dayAgoApproved, dayAgoTotal);
+          const dayAgoRate = getRate(dayAgoApproved, dayAgoTotal);
 
-        return {
-          dao,
-          proposals: {
-            count: total,
-            growth: getGrowth(total, dayAgoTotal),
-          },
-          approvedProposals: {
-            count: approved,
-            growth: getGrowth(approved, dayAgoApproved),
-          },
-          voteRate: {
-            count: rate,
-            growth: getGrowth(rate, dayAgoRate),
-          },
-          overview: totalHistory.map(({ date, value }) => {
-            const approved = approvedHistory.find(
-              (row) => date.valueOf() === row.date.valueOf(),
-            );
-            return {
-              timestamp: date.valueOf(),
-              count: getRate(approved?.value || 0, value),
-            };
-          }),
-        };
-      }),
+          return {
+            dao,
+            proposals: {
+              count: total,
+              growth: getGrowth(total, dayAgoTotal),
+            },
+            approvedProposals: {
+              count: approved,
+              growth: getGrowth(approved, dayAgoApproved),
+            },
+            voteRate: {
+              count: rate,
+              growth: getGrowth(rate, dayAgoRate),
+            },
+            overview: totalHistory.map(({ date, value }) => {
+              const approved = approvedHistory.find(
+                (row) => date.valueOf() === row.date.valueOf(),
+              );
+              return {
+                timestamp: date.valueOf(),
+                count: getRate(approved?.value || 0, value),
+              };
+            }),
+          };
+        }),
     );
 
-    return { metrics };
+    return { metrics, total: leaderboard.length };
   }
 }
