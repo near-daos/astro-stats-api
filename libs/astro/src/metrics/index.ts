@@ -17,6 +17,7 @@ import {
   MembersCountMetric,
 } from './groups';
 import {
+  ProposalsActiveVoteCountMetric,
   ProposalsApprovedCountMetric,
   ProposalsBountyCountMetric,
   ProposalsCouncilMemberCountMetric,
@@ -27,6 +28,7 @@ import {
   ProposalsPolicyChangeCountMetric,
   ProposalsRejectedCountMetric,
   ProposalsTransferCountMetric,
+  ProposalsVoteCountMetric,
 } from './proposals';
 import {
   FtsCountMetric,
@@ -62,6 +64,8 @@ export const DAO_METRICS = [
   ProposalsCouncilMemberCountMetric,
   ProposalsPolicyChangeCountMetric,
   ProposalsTransferCountMetric,
+  ProposalsVoteCountMetric,
+  ProposalsActiveVoteCountMetric,
   ProposalsBountyCountMetric,
   ProposalsInProgressCountMetric,
   ProposalsApprovedCountMetric,

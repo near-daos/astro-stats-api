@@ -14,6 +14,8 @@ export enum DaoStatsMetric {
   MembersCount = 'MEMBERS_COUNT' /* total count of unique members of all groups in contract's policy */,
   ProposalsCount = 'PROPOSALS_COUNT' /* total count of proposals in contract */,
   ProposalsTransferCount = 'PROPOSALS_TRANSFER_COUNT' /* total count of proposals with kind = Transfer */,
+  ProposalsVoteCount = 'PROPOSALS_VOTE_COUNT' /* total count of proposals with kind = Vote */,
+  ProposalsActiveVoteCount = 'PROPOSALS_ACTIVE_VOTE_COUNT' /* total count of proposals with kind = Vote and status = InProgress */,
   ProposalsCouncilMemberCount = 'PROPOSALS_COUNCIL_MEMBER_COUNT' /* total count of proposals to add or remove council member */,
   ProposalsPolicyChangeCount = 'PROPOSALS_POLICY_CHANGE_COUNT' /* total count of proposals with kind = PolicyChange */,
   ProposalsInProgressCount = 'PROPOSALS_IN_PROGRESS_COUNT' /* total count of proposals with status = InProgress */,

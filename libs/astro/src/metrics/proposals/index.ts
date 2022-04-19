@@ -1,3 +1,4 @@
+export * from './proposals-active-vote-count.metric';
 export * from './proposals-approved-count.metric';
 export * from './proposals-bounty-count.metric';
 export * from './proposals-council-member-count.metric';
@@ -8,3 +9,4 @@ export * from './proposals-member-count.metric';
 export * from './proposals-policy-change-count.metric';
 export * from './proposals-rejected-count.metric';
 export * from './proposals-transfer-count.metric';
+export * from './proposals-vote-count.metric';
