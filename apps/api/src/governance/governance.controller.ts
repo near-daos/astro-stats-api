@@ -135,6 +135,66 @@ export class GovernanceController {
 
   @ApiResponse({
     status: 200,
+    type: MetricResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request Response based on the query params set',
+  })
+  @Get('/active-proposals')
+  async activeProposals(
+    @Param(ContractContextPipe) context: ContractContext,
+    @Query(MetricQueryPipe) metricQuery: MetricQuery,
+  ): Promise<MetricResponse> {
+    return this.governanceService.activeProposals(context, metricQuery);
+  }
+
+  @ApiResponse({
+    status: 200,
+    type: LeaderboardMetricResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request Response based on the query params set',
+  })
+  @Get('/active-proposals/leaderboard')
+  async activeProposalsLeaderboard(
+    @Param(ContractContextPipe) context: ContractContext,
+    @Query(PaginationQueryPipe) query: PaginationDto,
+  ): Promise<LeaderboardMetricResponse> {
+    return this.governanceService.activeProposalsLeaderboard(context, query);
+  }
+
+  @ApiResponse({
+    status: 200,
+    type: MetricResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request Response based on the query params set',
+  })
+  @Get('/active-votes')
+  async activeVotes(
+    @Param(ContractContextPipe) context: ContractContext,
+    @Query(MetricQueryPipe) metricQuery: MetricQuery,
+  ): Promise<MetricResponse> {
+    return this.governanceService.activeProposals(context, metricQuery);
+  }
+
+  @ApiResponse({
+    status: 200,
+    type: LeaderboardMetricResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request Response based on the query params set',
+  })
+  @Get('/active-votes/leaderboard')
+  async activeVotesLeaderboard(
+    @Param(ContractContextPipe) context: ContractContext,
+    @Query(PaginationQueryPipe) query: PaginationDto,
+  ): Promise<LeaderboardMetricResponse> {
+    return this.governanceService.activeProposalsLeaderboard(context, query);
+  }
+
+  @ApiResponse({
+    status: 200,
     type: GovernanceTotalResponse,
   })
   @ApiBadRequestResponse({
@@ -194,5 +254,37 @@ export class GovernanceController {
     @Query(MetricQueryPipe) metricQuery: MetricQuery,
   ): Promise<MetricResponse> {
     return this.governanceService.voteRate(context, metricQuery);
+  }
+
+  @ApiResponse({
+    status: 200,
+    type: MetricResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request Response based on the query params set',
+  })
+  @HasDaoContractContext()
+  @Get('/:dao/active-proposals')
+  async daoActiveProposals(
+    @Param(ContractContextPipe) context: DaoContractContext,
+    @Query(MetricQueryPipe) metricQuery: MetricQuery,
+  ): Promise<MetricResponse> {
+    return this.governanceService.activeProposals(context, metricQuery);
+  }
+
+  @ApiResponse({
+    status: 200,
+    type: MetricResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request Response based on the query params set',
+  })
+  @HasDaoContractContext()
+  @Get('/:dao/active-votes')
+  async daoActiveVotes(
+    @Param(ContractContextPipe) context: DaoContractContext,
+    @Query(MetricQueryPipe) metricQuery: MetricQuery,
+  ): Promise<MetricResponse> {
+    return this.governanceService.activeVotes(context, metricQuery);
   }
 }
