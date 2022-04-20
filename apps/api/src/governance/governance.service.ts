@@ -51,6 +51,8 @@ export class GovernanceService {
       proposalsTransferCount,
       proposalsBountyCount,
       proposalsMemberCount,
+      activeProposals,
+      activeVotes,
     ] = await Promise.all([
       this.daoStatsService.getValue({
         contractId,
@@ -89,6 +91,14 @@ export class GovernanceService {
         dao,
         metric: DaoStatsMetric.ProposalsMemberCount,
       }),
+      this.metricService.total(
+        context,
+        DaoStatsMetric.ProposalsInProgressCount,
+      ),
+      this.metricService.total(
+        context,
+        DaoStatsMetric.ProposalsActiveVoteCount,
+      ),
     ]);
 
     const voteRate = getRate(proposalsApprovedCount, proposalsCount);
@@ -115,6 +125,8 @@ export class GovernanceService {
           getRate(dayAgoProposalsApprovedCount, dayAgoProposalsCount),
         ),
       },
+      activeProposals,
+      activeVotes,
     };
   }
 
@@ -426,5 +438,49 @@ export class GovernanceService {
     );
 
     return { metrics, total: leaderboard.length };
+  }
+
+  async activeProposals(
+    context: ContractContext | DaoContractContext,
+    metricQuery: MetricQuery,
+  ): Promise<MetricResponse> {
+    return this.metricService.history(
+      context,
+      metricQuery,
+      DaoStatsMetric.ProposalsInProgressCount,
+    );
+  }
+
+  async activeProposalsLeaderboard(
+    context: ContractContext,
+    pagination: PaginationDto,
+  ): Promise<LeaderboardMetricResponse> {
+    return this.metricService.leaderboard(
+      context,
+      pagination,
+      DaoStatsMetric.ProposalsInProgressCount,
+    );
+  }
+
+  async activeVotes(
+    context: ContractContext | DaoContractContext,
+    metricQuery: MetricQuery,
+  ): Promise<MetricResponse> {
+    return this.metricService.history(
+      context,
+      metricQuery,
+      DaoStatsMetric.ProposalsActiveVoteCount,
+    );
+  }
+
+  async activeVotesLeaderboard(
+    context: ContractContext,
+    pagination: PaginationDto,
+  ): Promise<LeaderboardMetricResponse> {
+    return this.metricService.leaderboard(
+      context,
+      pagination,
+      DaoStatsMetric.ProposalsActiveVoteCount,
+    );
   }
 }
