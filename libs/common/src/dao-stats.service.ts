@@ -2,19 +2,20 @@ import { Connection, InsertResult, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 
-import { DaoStats, DaoStatsDto, DaoStatsMetric } from '.';
+import { DaoStats, DaoStatsDto, DaoStatsFunc, DaoStatsMetric } from '.';
 
 export interface DaoStatsValueParams {
   contractId: string;
   dao?: string;
   metric: DaoStatsMetric | DaoStatsMetric[];
-  daoAverage?: boolean;
+  func?: DaoStatsFunc;
 }
 
 export interface DaoStatsLeaderboardParams {
   contractId: string;
   dao?: string;
   metric: DaoStatsMetric | DaoStatsMetric[];
+  func?: DaoStatsFunc;
   offset?: number;
   limit?: number;
 }
@@ -55,7 +56,7 @@ export class DaoStatsService {
     contractId,
     dao,
     metric,
-    daoAverage,
+    func,
   }: DaoStatsValueParams): Promise<number> {
     const query = this.repository
       .createQueryBuilder()
@@ -82,7 +83,7 @@ export class DaoStatsService {
     const [result] = await this.connection.query(
       `
           with data as (${subQuery})
-          select ${daoAverage ? 'avg' : 'sum'}(value) as value
+          select ${func}(value) as value
           from data`,
       params,
     );
