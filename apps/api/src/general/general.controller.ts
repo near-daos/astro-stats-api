@@ -90,6 +90,21 @@ export class GeneralController {
   @ApiBadRequestResponse({
     description: 'Bad Request Response based on the query params set',
   })
+  @Get('/active-daos')
+  async activeDaos(
+    @Param(ContractContextPipe) context: ContractContext,
+    @Query(MetricQueryPipe) metricQuery: MetricQuery,
+  ): Promise<MetricResponse> {
+    return this.generalService.activeDaos(context, metricQuery);
+  }
+
+  @ApiResponse({
+    status: 200,
+    type: MetricResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request Response based on the query params set',
+  })
   @Get('/groups')
   async groups(
     @Param(ContractContextPipe) context: ContractContext,

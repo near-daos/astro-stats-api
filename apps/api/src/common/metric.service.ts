@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import {
   ContractContext,
   DaoContractContext,
+  DaoStatsFunc,
   DaoStatsHistoryService,
   DaoStatsMetric,
   DaoStatsService,
@@ -25,7 +26,7 @@ export class MetricService {
   async total(
     context: DaoContractContext | ContractContext,
     metric: DaoStatsMetric | DaoStatsMetric[],
-    daoAverage?: boolean,
+    func: DaoStatsFunc = 'sum',
   ): Promise<TotalMetric> {
     const { contractId, dao } = context as DaoContractContext;
 
@@ -36,13 +37,13 @@ export class MetricService {
         contractId,
         dao,
         metric,
-        daoAverage,
+        func,
       }),
       this.daoStatsHistoryService.getLastValue({
         contractId,
         dao,
         metric,
-        daoAverage,
+        func,
         to: dayAgo.valueOf(),
       }),
     ]);
@@ -57,7 +58,7 @@ export class MetricService {
     context: ContractContext | DaoContractContext,
     metricQuery: MetricQuery,
     metric: DaoStatsMetric | DaoStatsMetric[],
-    daoAverage?: boolean,
+    func?: DaoStatsFunc,
   ): Promise<MetricResponse> {
     const { contractId, dao } = context as DaoContractContext;
     const { from, to } = metricQuery;
@@ -66,7 +67,7 @@ export class MetricService {
       contractId,
       dao,
       metric,
-      daoAverage,
+      func,
       from,
       to,
     });

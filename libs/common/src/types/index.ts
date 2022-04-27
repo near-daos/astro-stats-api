@@ -1,3 +1,4 @@
+export * from './dao-stats-func';
 export * from './dao-stats-metric';
 export * from './dao-stats-metric-group';
 export * from './transaction-type';

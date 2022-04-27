@@ -31,11 +31,16 @@ export class GeneralService {
     const monthAgo = moment().subtract(1, 'month');
     const twoMonthsAgo = moment().subtract(2, 'months');
 
-    const [dao, groups, averageGroups, activity, monthAgoActivity] =
+    const [dao, activeDaos, groups, averageGroups, activity, monthAgoActivity] =
       await Promise.all([
         this.metricService.total(context, DaoStatsMetric.DaoCount),
+        this.metricService.total(
+          context,
+          DaoStatsMetric.ProposalsInProgressCount,
+          'count',
+        ),
         this.metricService.total(context, DaoStatsMetric.GroupsCount),
-        this.metricService.total(context, DaoStatsMetric.GroupsCount, true),
+        this.metricService.total(context, DaoStatsMetric.GroupsCount, 'avg'),
         this.transactionService.getContractActivityCount(context, {
           from: monthAgo.valueOf(),
         }),
@@ -51,6 +56,7 @@ export class GeneralService {
         count: activity.count,
         growth: getGrowth(activity.count, monthAgoActivity.count),
       },
+      activeDaos,
       groups,
       averageGroups,
     };
@@ -152,6 +158,18 @@ export class GeneralService {
     return { metrics, total };
   }
 
+  async activeDaos(
+    context: ContractContext | DaoContractContext,
+    metricQuery: MetricQuery,
+  ): Promise<MetricResponse> {
+    return this.metricService.history(
+      context,
+      metricQuery,
+      DaoStatsMetric.ProposalsInProgressCount,
+      'count',
+    );
+  }
+
   async groups(
     context: ContractContext | DaoContractContext,
     metricQuery: MetricQuery,
@@ -182,7 +200,7 @@ export class GeneralService {
       context,
       metricQuery,
       DaoStatsMetric.GroupsCount,
-      true,
+      'avg',
     );
   }
 }
