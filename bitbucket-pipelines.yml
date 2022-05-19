@@ -81,9 +81,9 @@ definitions:
             - &docker-build >-
               docker build
               --build-arg APP_NAME=$APP_NAME
-              -t dao-stats-${APP_NAME}:latest
-              -t dao-stats-${APP_NAME}:develop-latest
-              -t dao-stats-${APP_NAME}:$DOCKER_ENV_TAG
+              -t astro-stats-${APP_NAME}:latest
+              -t astro-stats-${APP_NAME}:develop-latest
+              -t astro-stats-${APP_NAME}:$DOCKER_ENV_TAG
               .
             - >-
               docker save $(docker images -qa) > docker-cache/cache.tar;
@@ -93,7 +93,7 @@ definitions:
                 AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
                 AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
                 AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
-                IMAGE_NAME: dao-stats-${APP_NAME}
+                IMAGE_NAME: astro-stats-${APP_NAME}
                 TAGS: >-
                   latest
                   develop-latest
@@ -125,7 +125,7 @@ definitions:
               do
                 export CHART_FOLDER=apps/${APP_NAME}/deployment/app-chart
                 helm lint $CHART_FOLDER
-                helm template dao-stats-$APP_NAME $CHART_FOLDER \
+                helm template astro-stats-$APP_NAME $CHART_FOLDER \
                   --set image.tag=$DOCKER_ENV_TAG \
                   --set ingress.host=$K8S_INGRESS_HOST \
                   --set aggregatorConfig=$AGGREGATOR_CONFIG \

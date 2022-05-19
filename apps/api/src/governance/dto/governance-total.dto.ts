@@ -11,4 +11,10 @@ export class GovernanceTotalResponse {
 
   @ApiProperty()
   voteRate: TotalMetric;
+
+  @ApiProperty()
+  activeProposals: TotalMetric;
+
+  @ApiProperty()
+  activeVotes: TotalMetric;
 }

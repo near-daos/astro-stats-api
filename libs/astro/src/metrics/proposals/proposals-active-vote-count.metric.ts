@@ -6,12 +6,14 @@ import {
   DaoContractMetricHistoryResponse,
   DaoContractMetricInterface,
 } from '../../interfaces';
-import { ProposalStatus } from '../../types';
+import { ProposalKind, ProposalStatus } from '../../types';
 
 @Injectable()
-export class ProposalsExpiredCountMetric implements DaoContractMetricInterface {
+export class ProposalsActiveVoteCountMetric
+  implements DaoContractMetricInterface
+{
   getType(): DaoStatsMetric {
-    return DaoStatsMetric.ProposalsExpiredCount;
+    return DaoStatsMetric.ProposalsActiveVoteCount;
   }
 
   async getCurrentValue({
@@ -19,7 +21,8 @@ export class ProposalsExpiredCountMetric implements DaoContractMetricInterface {
   }: DaoContractMetricCurrentParams): Promise<number> {
     return (
       await contract.getProposalsBy({
-        statuses: [ProposalStatus.Expired],
+        kinds: [ProposalKind.Vote],
+        statuses: [ProposalStatus.InProgress],
       })
     ).length;
   }

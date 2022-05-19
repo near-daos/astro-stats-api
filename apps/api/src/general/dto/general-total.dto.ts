@@ -9,6 +9,9 @@ export class GeneralTotalResponse {
   activity: TotalMetric;
 
   @ApiProperty()
+  activeDaos: TotalMetric;
+
+  @ApiProperty()
   groups: TotalMetric;
 
   @ApiProperty()

@@ -2,7 +2,7 @@ import { Connection, InsertResult, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 
-import { DaoStatsDto, DaoStatsHistory, DaoStatsMetric } from '.';
+import { DaoStatsDto, DaoStatsFunc, DaoStatsHistory, DaoStatsMetric } from '.';
 
 export interface DaoStatsHistoryValueParams {
   from?: number;
@@ -10,7 +10,7 @@ export interface DaoStatsHistoryValueParams {
   contractId: string;
   dao?: string;
   metric: DaoStatsMetric | DaoStatsMetric[];
-  daoAverage?: boolean;
+  func?: DaoStatsFunc;
 }
 
 export type DaoStatsHistoryHistoryParams = DaoStatsHistoryValueParams;
@@ -58,7 +58,7 @@ export class DaoStatsHistoryService {
     contractId,
     dao,
     metric,
-    daoAverage,
+    func = 'sum',
     from,
     to,
   }: DaoStatsHistoryValueParams): Promise<number> {
@@ -99,11 +99,11 @@ export class DaoStatsHistoryService {
     const [result] = await this.connection.query(
       `
           with data as (${subQuery})
-          select ${daoAverage ? 'avg' : 'sum'}(value) as value
+          select ${func}(value) as value
           from data
           group by date
           order by date desc
-          limit 1
+              limit 1
       `,
       params,
     );
@@ -119,7 +119,7 @@ export class DaoStatsHistoryService {
     contractId,
     dao,
     metric,
-    daoAverage,
+    func = 'sum',
     from,
     to,
   }: DaoStatsHistoryHistoryParams): Promise<DaoStatsHistoryHistoryResponse> {
@@ -160,7 +160,7 @@ export class DaoStatsHistoryService {
     const result = await this.connection.query(
       `
           with data as (${subQuery})
-          select date, ${daoAverage ? 'avg' : 'sum'}(value) as value
+          select date, ${func}(value) as value
           from data
           group by date
           order by date
