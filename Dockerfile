@@ -23,13 +23,9 @@ COPY . .
 
 # build application
 RUN npm link webpack && \
-  npm run build $APP_NAME
+  npm run build $APP_NAME && \
+  npm prune --production
 
-# remove development dependencies
-# RUN npm prune --production
-
-# run node prune
-npm prune
 
 # remove unused dependencies
 RUN rm -rf node_modules/rxjs/src/
