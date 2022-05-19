@@ -56,7 +56,7 @@ export class DaoStatsService {
     contractId,
     dao,
     metric,
-    func,
+    func = 'sum',
   }: DaoStatsValueParams): Promise<number> {
     const query = this.repository
       .createQueryBuilder()
