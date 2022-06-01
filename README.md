@@ -3,7 +3,7 @@
 [![Release version](https://img.shields.io/github/v/release/near-daos/dao-stats-api)](https://github.com/near-daos/dao-stats-api/releases/)
 [![Build](https://github.com/near-daos/dao-stats-api/actions/workflows/build-deploy.yaml/badge.svg)](https://github.com/near-daos/dao-stats-api/actions/workflows/build-deploy.yaml)
 
-A backend middleware for Astro Stats providing access to multiple DAO metrics. 
+A backend middleware for Astro Stats providing access to multiple DAO metrics.
 
 #### Technology stack
 
@@ -23,12 +23,10 @@ A backend middleware for Astro Stats providing access to multiple DAO metrics.
 #### Links
 
 ##### Development
-Testnet: [https://testnet.development.api.daostats.io](https://testnet.development.api.daostats.io/docs)  
-Mainnet: [https://mainnet.development.api.daostats.io](https://mainnet.development.api.daostats.io/docs)  
+Testnet: [https://dev.api.astrostats.magicpowered.io/docs/](https://dev.api.astrostats.magicpowered.io/docs/)
 
 ##### Production
-Production Testnet: [https://testnet.api.daostats.io](https://testnet.api.daostats.io)  
-Production Mainnet: [https://mainnet.api.daostats.io](https://mainnet.api.daostats.io)
+Mainnet: [https://api.astrostats.magicpowered.io/docs/](https://api.astrostats.magicpowered.io/docs/)
 
 ## Getting Started
 
