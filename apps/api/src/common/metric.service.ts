@@ -31,6 +31,7 @@ export class MetricService {
     const { contractId, dao } = context as DaoContractContext;
 
     const dayAgo = moment().subtract(1, 'days');
+    const weekAgo = moment().subtract(1, 'week');
 
     const [current, prev] = await Promise.all([
       this.daoStatsService.getValue({
@@ -44,6 +45,7 @@ export class MetricService {
         dao,
         metric,
         func,
+        from: weekAgo.valueOf(),
         to: dayAgo.valueOf(),
       }),
     ]);
@@ -93,6 +95,7 @@ export class MetricService {
     const { offset, limit } = pagination;
 
     const dayAgo = moment().subtract(1, 'day');
+    const weekAgo = moment().subtract(1, 'week');
     const monthAgo = moment().subtract(1, 'month');
 
     const { data: leaderboard, total } =
@@ -110,6 +113,7 @@ export class MetricService {
             contractId,
             dao,
             metric,
+            from: weekAgo.valueOf(),
             to: dayAgo.valueOf(),
           }),
           this.daoStatsHistoryService.getHistory({

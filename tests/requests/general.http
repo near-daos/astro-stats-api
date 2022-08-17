@@ -10,6 +10,9 @@ Accept: application/json
 GET http://127.0.0.1:3000/api/v1/astro/general/active/leaderboard
 Accept: application/json
 ###
+GET http://127.0.0.1:3000/api/v1/astro/general/active-daos
+Accept: application/json
+###
 GET http://127.0.0.1:3000/api/v1/astro/general/groups
 Accept: application/json
 ###
