@@ -23,10 +23,10 @@ A backend middleware for Astro Stats providing access to multiple DAO metrics.
 #### Links
 
 ##### Development
-Testnet: [https://dev.api.astrostats.magicpowered.io/docs/](https://dev.api.astrostats.magicpowered.io/docs/)
+Testnet: [https://api-stats.testnet.app.astrodao.com/docs/](https://api-stats.testnet.app.astrodao.com/docs/)
 
 ##### Production
-Mainnet: [https://api.astrostats.magicpowered.io/docs/](https://api.astrostats.magicpowered.io/docs/)
+Mainnet: [api-stats.app.astrodao.com/docs/](https://api-stats.app.astrodao.com/docs/)
 
 ## Getting Started
 
