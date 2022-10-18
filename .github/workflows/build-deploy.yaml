@@ -81,5 +81,4 @@ jobs:
             helm --debug -n $EKS_NAMESPACE \
               upgrade --install astro-stats-${{ matrix.app }} $CHART_FOLDER \
               --set image.tag=${{ needs.get-environment.outputs.docker_env_tag }} \
-              --set aggregatorConfig=${{ secrets.AGGREGATOR_CONFIG }} \
               --set ingress.host=$EKS_INGRESS_HOST
