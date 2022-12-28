@@ -1,7 +1,7 @@
 # Astro Stats API
 
-[![Release version](https://img.shields.io/github/v/release/near-daos/dao-stats-api)](https://github.com/near-daos/dao-stats-api/releases/)
-[![Build](https://github.com/near-daos/dao-stats-api/actions/workflows/build-deploy.yaml/badge.svg)](https://github.com/near-daos/dao-stats-api/actions/workflows/build-deploy.yaml)
+[![Release version](https://img.shields.io/github/v/release/near-daos/astro-stats-api)](https://github.com/near-daos/astro-stats-api/releases/)
+[![Build](https://github.com/near-daos/astro-stats-api/actions/workflows/build-deploy.yaml/badge.svg)](https://github.com/near-daos/astro-stats-api/actions/workflows/build-deploy.yaml)
 
 A backend middleware for Astro Stats providing access to multiple DAO metrics.
 
@@ -18,7 +18,7 @@ A backend middleware for Astro Stats providing access to multiple DAO metrics.
 
 #### Status
 
-[Change Log](https://github.com/near-daos/dao-stats-api/releases/latest)
+[Change Log](https://github.com/near-daos/astro-stats-api/releases/latest)
 
 #### Links
 
@@ -34,12 +34,12 @@ Mainnet: [api-stats.app.astrodao.com/docs/](https://api-stats.app.astrodao.com/d
 
 1. Clone the repo:
 ```
-git clone git@github.com:near-daos/dao-stats-api.git
+git clone git@github.com:near-daos/astro-stats-api.git
 ```
 
 2. Open the repo folder:
 ```
-cd dao-stats-api
+cd astro-stats-api
 ```
 
 3. Install dependencies:
